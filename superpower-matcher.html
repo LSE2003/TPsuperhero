@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperPower Matcher</title>
+  <!-- Liens vers les styles Bootstrap et ton propre CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="TPvue.css">
+  <style>
+    /* Styles supplémentaires pour réduire la taille des curseurs */
+    .form-range {
+      width: 200px; /* Largeur réduite pour les curseurs */
+    }
+
+    .range-label {
+      display: inline-block;
+      width: 100px;
+    }
+
+    .container {
+      max-width: 800px; /* Pour éviter que le contenu soit trop large */
+    }
+  </style>
+</head>
+<body>
+<!-- Zone pour la barre de navigation -->
+<div id="navbar-placeholder"></div>
+
+<div id="app">
+  <!-- Contenu spécifique à cette page -->
+  <div class="container mt-5">
+    <h2>Superpower Matcher</h2>
+
+    <!-- Liste des pouvoirs avec curseurs -->
+    <div v-for="power in availablePowers" :key="power" class="mb-4">
+      <label :for="power" class="range-label">{{ power.charAt(0).toUpperCase() + power.slice(1) }}</label>
+      <input
+              type="range"
+              class="form-range"
+              :id="power"
+              v-model="selectedPowers[power]"
+              min="0"
+              max="100">
+      <span>{{ selectedPowers[power] }}</span>
+    </div>
+
+    <button class="btn btn-primary" onclick="findHeroes()">Rechercher</button>
+
+    <!-- Affichage des super-héros qui correspondent aux critères -->
+    <div id="heroes-list" class="mt-4">
+      <p v-if="loading">Chargement...</p>
+      <p v-else-if="matchingHeroes.length === 0">Aucun super-héros trouvé.</p>
+      <ul v-else>
+        <li v-for="hero in matchingHeroes" :key="hero.id">
+          {{ hero.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Chargement de la barre de navigation
+  fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar-placeholder').innerHTML = data;
+          })
+          .catch(error => console.error('Erreur de chargement de la barre de navigation :', error));
+
+  // Fonction pour trouver des super-héros qui correspondent aux critères
+  function findHeroes() {
+    const intelligence = document.getElementById('intelligence').value;
+    const strength = document.getElementById('strength').value;
+    const speed = document.getElementById('speed').value;
+    const durability = document.getElementById('durability').value;
+    const combat = document.getElementById('combat').value;
+
+    // On va ici filtrer les super-héros selon les critères des curseurs
+    const heroList = [
+      { name: 'Superman', powers: { intelligence: 85, strength: 100, speed: 90, durability: 100, combat: 95 } },
+      { name: 'Batman', powers: { intelligence: 95, strength: 75, speed: 70, durability: 80, combat: 100 } },
+      { name: 'Flash', powers: { intelligence: 70, strength: 60, speed: 100, durability: 85, combat: 90 } },
+      { name: 'Wonder Woman', powers: { intelligence: 80, strength: 90, speed: 80, durability: 90, combat: 95 } }
+    ];
+
+    // Filtre des héros en fonction des curseurs
+    const matchingHeroes = heroList.filter(hero => {
+      return (
+              hero.powers.intelligence >= intelligence &&
+              hero.powers.strength >= strength &&
+              hero.powers.speed >= speed &&
+              hero.powers.durability >= durability &&
+              hero.powers.combat >= combat
+      );
+    });
+
+    // Affichage de la liste des héros correspondants
+    const heroesListDiv = document.getElementById('heroes-list');
+    heroesListDiv.innerHTML = '';
+    matchingHeroes.forEach(hero => {
+      const heroElement = document.createElement('div');
+      heroElement.textContent = hero.name;
+      heroesListDiv.appendChild(heroElement);
+    });
+  }
+</script>
+
+<!-- Liens vers Vue.js et Axios -->
+<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="superpower-matcher.js"></script>
+</body>
+</html>

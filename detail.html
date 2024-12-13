@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détails du Super-héros</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      background-color: #f4f6f9;
+    }
+    .hero-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .card {
+      border-radius: 15px;
+    }
+    .card-header {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+    .card-body {
+      background-color: #ffffff;
+    }
+    .section-title {
+      color: #007bff;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+    .details-list li {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Zone pour la barre de navigation -->
+<div id="navbar-placeholder"></div>
+
+<!-- Contenu spécifique à la page de détails -->
+<div id="app">
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Détails du Super-héros</h1>
+
+    <!-- Barre de recherche pour entrer un ID -->
+    <div class="row mb-4">
+      <div class="col-md-6 offset-md-3">
+        <input type="text" v-model="searchId" class="form-control" placeholder="Entrez l'ID d'un super-héros" @keyup.enter="searchHero" />
+      </div>
+    </div>
+    <button class="btn btn-primary mb-4" @click="searchHero">Rechercher</button>
+
+    <!-- Affichage du message de chargement ou erreur -->
+    <div v-if="loading" class="alert alert-info">Chargement des détails...</div>
+    <div v-if="error" class="alert alert-danger">Erreur lors de la récupération des détails. Veuillez réessayer.</div>
+
+    <!-- Affichage des informations du super-héros -->
+    <div v-if="hero" class="card shadow-lg">
+      <div class="card-header text-center">
+        <h3>{{ hero.name }}</h3>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <!-- Image du super-héros -->
+          <div class="col-md-4 text-center mb-3">
+            <img :src="hero.image" alt="Image du super-héros" class="hero-image">
+          </div>
+
+          <!-- Détails sur le super-héros -->
+          <div class="col-md-8">
+            <div class="section-title">Biographie</div>
+            <ul class="list-unstyled details-list">
+              <li><strong>Nom complet:</strong> {{ hero.biography.fullName }}</li>
+              <li><strong>Pseudonymes:</strong> {{ hero.biography.aliases.join(', ') || 'Aucun pseudonyme trouvé' }}</li>
+              <li><strong>Lieu de naissance:</strong> {{ hero.biography.placeOfBirth }}</li>
+              <li><strong>Première apparition:</strong> {{ hero.biography.firstAppearance }}</li>
+              <li><strong>Éditeur:</strong> {{ hero.biography.publisher }}</li>
+              <li><strong>Alignement:</strong> {{ hero.biography.alignment }}</li>
+            </ul>
+
+            <div class="section-title">Apparence</div>
+            <ul class="list-unstyled details-list">
+              <li><strong>Genre:</strong> {{ hero.appearance.gender }}</li>
+              <li><strong>Race:</strong> {{ hero.appearance.race }}</li>
+              <li><strong>Couleur des yeux:</strong> {{ hero.appearance.eyeColor }}</li>
+              <li><strong>Couleur des cheveux:</strong> {{ hero.appearance.hairColor }}</li>
+            </ul>
+
+            <div class="section-title">Pouvoirs</div>
+            <ul class="list-unstyled details-list">
+              <li v-for="(value, key) in hero.powers" :key="key">
+                <strong>{{ key }}:</strong> {{ value }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="detail.js"></script> <!-- Lien vers le fichier detail.js -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

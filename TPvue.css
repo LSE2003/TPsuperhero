@@ -1,0 +1,52 @@
+/* TPvue.css */
+
+/* Style global pour la barre de navigation */
+.navbar {
+  background-color: #007bff; /* Bleu */
+  color: white;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Style pour les liens dans la barre de navigation */
+.navbar a {
+  color: white; /* Blanc */
+  text-decoration: none;
+  margin-right: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* Style pour les boutons */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white; /* Blanc */
+  background-color: #007bff; /* Bleu */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3; /* Bleu plus foncé */
+}
+
+/* Style pour la section détails */
+.details-container {
+  margin: 20px auto;
+  max-width: 800px;
+  padding: 20px;
+  border: 1px solid #ddd;
+}
